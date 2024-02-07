@@ -354,12 +354,13 @@
                 data[key] = value;
             });
 
-            fetch('http://diggajmotors.s3-website.ap-south-1.amazonaws.com/submit-form', {
+            fetch('https://main.dh1ssshy98f7w.amplifyapp.com/node.js/public/submit-form', {
 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
+                    mode: 'cors',
                     body: JSON.stringify(data),
                 })
                 .then(response => response.json())
