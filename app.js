@@ -6,17 +6,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://diggajmotors.s3-website.ap-south-1.amazonaws.com');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-  });
-
- 
+app.use(cors());
   
 
 app.use(express.static('public'));
@@ -24,16 +14,18 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/DiggajMotorsDB', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
+
+mongoose.connect('mongodb+srv://connectstuti:AkhileshMahajan26@cluster0.cs5albf.mongodb.net/DiggajMotorsDB', { useNewUrlParser: true, useUnifiedTopology: true })
+.then(() => {
         console.log('MongoDB connection successful');
         app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log('Server is running on http://localhost:${PORT}');
         });
     })
     .catch((error) => {
         console.error('MongoDB connection failed:', error);
     });
+
 
 const customerSchema = new mongoose.Schema({
     Name: {
