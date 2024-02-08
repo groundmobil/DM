@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-mongoose.connect('mongodb+srv://connectstuti:AkhileshMahajan26@cluster0.cs5albf.mongodb.net/DiggajMotorsDB', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongosh "mongodb+srv://cluster0.zhkvyeb.mongodb.net/" --apiVersion 1 --username connectstuti', { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
         console.log('MongoDB connection successful');
         app.listen(PORT, () => {
