@@ -3,11 +3,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-
 const app = express();
-const PORT = process.env.PORT || 3000;
-app.use(cors());
+const PORT = process.env.PORT || 4000;
 
+app.use(cors());
   
 
 app.use(express.static('public'));
@@ -26,7 +25,7 @@ mongoose.connect(mongoDBURI, options)
     .then(() => {
         console.log('MongoDB connection successful');
         app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`Server is running on https://www.diggajmotors.com/`);
         });
     })
     .catch((error) => {
@@ -64,19 +63,19 @@ const Customers = mongoose.model('customer', customerSchema);
 
 app.post('/submit-form', async (req, res) => {
     const formData = req.body;
-    console.log('Received form data:', formData);
-
+    console.log(req)
     try {
+        console.log('Received form data:', formData);
+
         const savedForm = await Customers.create(formData);
         console.log('Saved form:', savedForm);
 
         res.json({ success: true, message: 'Form submitted successfully' });
     } catch (error) {
         console.error('Error during form submission:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error', details: error.message });
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
-
 
 
 
