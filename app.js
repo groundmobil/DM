@@ -14,12 +14,18 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-
-mongoose.connect('mongosh "mongodb+srv://cluster0.zhkvyeb.mongodb.net/" --apiVersion 1 --username connectstuti', { useNewUrlParser: true, useUnifiedTopology: true })
-.then(() => {
+const mongoDBURI = "mongodb+srv://cluster0.zhkvyeb.mongodb.net/DiggajMotors";
+const options = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user: "connectstuti",
+    pass: "DiggajDtabase",
+};
+mongoose.connect(mongoDBURI, options)
+    .then(() => {
         console.log('MongoDB connection successful');
         app.listen(PORT, () => {
-            console.log('Server is running on http://localhost:${PORT}');
+            console.log(`Server is running on http://localhost:${PORT}`);
         });
     })
     .catch((error) => {
