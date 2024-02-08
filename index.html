@@ -1,88 +1,396 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #background-image {
+            background-image: url("images/Desktop.jpg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100vh;
+            position: relative;
+            color: white;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .button-container {
+            align-self: flex-end;
+        }
+
+        .button {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #636568;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .social {
+            color: #ffffff;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        @media screen and (min-width: 768px) {
+            .button-container {
+                flex-direction: row;
+                margin-top: 0;
+            }
+
+            .button {
+                margin-right: 10px;
+                margin-bottom: 0;
+            }
+        }
+
+        #contact {
+            width: 100%;
+            background-color: #2b2a28;
+            color: white;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .map-container,
+        .contact-details {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .map-container {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .contact-details {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        .sub-title {
+            font-size: 1.5em;
+            color: #f7f3f3;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        .popup {
+            background: #d2d6dc;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 80%;
+            text-align: left;
+            position: relative;
+        }
+
+        .popup h2 {
+            color: #020202;
+            top: -35px;
+            display: inline-block;
+        }
+
+        .popup form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .popup label {
+            margin-bottom: 8px;
+            color: #101111;
+        }
+
+        .popup input,
+        .popup select {
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .popup button {
+            background: #007BFF;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .close-icon {
+            position: relative;
+            top: -35px;
+            right: -400px;
+            font-size: 20px;
+            color: #101111;
+            cursor: pointer;
+        }
+
+        @media screen and (max-width: 767px) {
+            #background-image {
+                background-image: url("images/diggaj\ mobile.png");
+                align-items: center;
+                padding: 10px;
+            }
+
+            .button-container {
+                align-self: flex-end;
+                margin-top: 20px;
+                flex-direction: row;
+            }
+
+            .button {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+
+            
+            .map-container,
+            .contact-details {
+                width: 100%;
+                max-width: 100%;
+                margin-right: 0;
+                margin-left: 0;
+            }
+
+            .container {
+                flex-direction: column;
+            }
+
+            .close-icon {
+                top: -40px;
+                right: -320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="background-image">
+        <div class="button-container">
+            <button class="button" onclick="scrollToContact()">Contact</button>
+            <button class="button" onclick="showPopup()">Enquiry Form</button>
+        </div>
+    </div>
+
+    <div id="contact">
+        <div class="container">
+            <div class="map-container">
+                <h1 class="sub-title">Location</h1>
+                <p>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.575518666733!2d73.79906027372381!3d18.638152865574963!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b959de339081%3A0x4708828d986a3dc4!2sPimpri%20Chinchwad%20Startup%20Incubation%20Centre!5e0!3m2!1sen!2sin!4v1705395771200!5m2!1sen!2sin"
+                        width="100%" height="450" style="border:0;" allowfullscreen=""
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </p>
+            </div>
+            <div class="contact-details">
+                <h1 class="sub-title">Contact Information</h1>
+
+                <h3><b><i class="fa-solid fa-location-dot">&nbsp;&nbsp;</i>Address:</b></h3>
+                <p>PCSIC, Autocluster Development and research Institute, Chinchwad east, Mumbai Pune road, Pune,
+                    Maharashtra, India-411019</p>
+                <h3><b><i class="fa-solid fa-phone">&nbsp;&nbsp;</i>Contact Us:</b></h3>
+                <p>+91-8329146965</p>
+                <h3><b><i class="fa-regular fa-envelope">&nbsp;&nbsp;</i>Email Id:</b></h3>
+                <a href="contact@diggajmotors.com">contact@diggajmotors.com</a>
+                <h3><b>Socials:</b></h3></b>
+                <a class="social" href="https://www.facebook.com/your-facebook-page" target="_blank">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a class="social" href="https://www.instagram.com/your-instagram-account" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a class="social" href="https://www.youtube.com/@GroundMobilEnergyPvt.Ltd" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a class="social" href="https://in.linkedin.com/company/diggaj-motors" target="_blank"
+                    rel="noopener noreferrer">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a class="social" href="https://twitter.com/DiggajMotors" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-square-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPopup() {
+
+            var existingPopup = document.querySelector('.popup');
+            if (existingPopup) {
+                return;
+            }
+
+            var overlay = document.createElement('div');
+            overlay.classList.add('overlay');
+
+            var popup = document.createElement('div');
+            popup.classList.add('popup');
+
+            var closeIcon = document.createElement('span');
+            closeIcon.innerHTML = '&times;';
+            closeIcon.classList.add('close-icon');
+            closeIcon.onclick = function () {
+                document.body.removeChild(overlay);
+            };
+            popup.appendChild(closeIcon);
+
+            var heading = document.createElement('h2');
+            heading.textContent = 'ENQUIRE NOW';
+            popup.appendChild(heading);
+
+            var form = document.createElement('form');
+            form.id = 'enquiry-form';
+            form.innerHTML = `
+                <label for="Name"><big><b>Name:</b></big></label>
+                <input type="text" id="Name" name="Name" required>
+
+                <label for="MobileNumber"><big><b>MobileNumber:</b></big></label>
+                <input type="tel" id="MobileNumber" name="MobileNumber" pattern="[0-9]{10}" required>
+
+                <label for="City"><big><b>Select City:</b></big></label>
+                <select id="City" name="City" required>
+                    <option value="interest">--Select your City--</option>
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Amravati">Amravati</option>
+                    <option value="Anand">Anand</option>
+                    <option value="Aurangabad">Aurangabad</option>
+                    <option value="Bengaluru">Bengaluru</option>
+                    <option value="Bharuch">Bharuch</option>
+                    <option value="Bhavnagar">Bhavnagar</option>
+                    <option value="Chennai">Chennai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Gandhinagar">Gandhinagar</option>
+                    <option value="Hyderabad">Hyderabad</option>
+                    <option value="Jaipur">Jaipur</option>
+                    <option value="Jamnagar">Jamnagar</option>
+                    <option value="Junagadh">Junagadh</option>
+                    <option value="Kolhapur">Kolhapur</option>
+                    <option value="Kolkata">Kolkata</option>
+                    <option value="Lucknow">Lucknow</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Nagpur">Nagpur</option>
+                    <option value="Nashik">Nashik</option>
+                    <option value="Noida">Noida</option>
+                    <option value="Pune">Pune</option>
+                    <option value="Rajkot">Rajkot</option>
+                    <option value="Solapur">Solapur</option>
+                    <option value="Surat">Surat</option>
+                    <option value="Thane">Thane</option>
+                    <option value="Vadodra">Vadodra</option>
+                   
+                </select>
+
+                <label for="Interest"><big><b>Interest:</b></big></label>
+                <select id="Interest" name="Interest" required>
+                    <option value="interest">--Select your Interest--</option>
+                    <option value="Product Enquiry">Product Enquiry</option>
+                    <option value="Investment">Investment</option>
+                    <option value="EV Reporter">EV Reporter</option>
+                    <option value="Career">Career</option>
+                </select>
+
+                <button type="submit" onclick="submitForm(event)"><big><b>Submit</b></big></button>
+            `;
+
+            popup.appendChild(form);
+            overlay.appendChild(popup);
+            document.body.appendChild(overlay);
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            var formData = new FormData(document.querySelector('form'));
+            var data = {};
+            formData.forEach(function (value, key) {
+                data[key] = value;
+            });
+
+            fetch('https://diggajmotors.com/submit-form', {
+
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+
+                    var message = result.success ? 'Form submitted successfully!' : 'Form submission failed. Please try again.';
+                    alert(message);
+
+                    var overlay = document.querySelector('.overlay');
+                    if (overlay) {
+                        document.body.removeChild(overlay);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                    alert('Form submission failed. Please try again.');
+                });
+        }
 
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-app.use(cors());
+        setTimeout(showPopup, 3000);
 
-  
+        function scrollToContact() {
+            var contactSection = document.getElementById('contact');
+            contactSection.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
 
-app.use(express.static('public'));
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-const mongoDBURI = "mongodb+srv://cluster0.zhkvyeb.mongodb.net/DiggajMotors";
-const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    user: "connectstuti",
-    pass: "DiggajDatabase",
-};
-mongoose.connect(mongoDBURI, options)
-    .then(() => {
-        console.log('MongoDB connection successful');
-        app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
-        });
-    })
-    .catch((error) => {
-        console.error('MongoDB connection failed:', error);
-    });
-
-
-const customerSchema = new mongoose.Schema({
-    Name: {
-        type: String,
-        required: true
-    },
-    MobileNumber: {
-        type: Number, 
-        required: true,
-        unique: true
-    },
-    City: {
-        type: String,
-        required: true,
-        enum: ['Ahmedabad', 'Amravati', 'Anand', 'Aurangabad', 'Bengaluru', 'Bharuch', 'Bhavnagar', 'Chennai', 'Delhi', 'Gandhinagar', 'Hyderabad', 'Jaipur', 'Jamnagar', 'Junagadh', 'Kolhapur', 'Kolkata', 'Lucknow', 'Mumbai', 'Nagpur', 'Nashik', 'Noida', 'Pune', 'Rajkot', 'Solapur', 'Surat', 'Thane', 'Vadodra']
-    },
-    Interest: {
-        type: String,
-        required: true,
-        enum: ['Product Enquiry', 'Investment', 'EV Reporter', 'Career']
-    }
-}, {
-    timestamps: true
-});
-
-const Customers = mongoose.model('customer', customerSchema);
-
-
-
-app.post('/submit-form', async (req, res) => {
-    const formData = req.body;
-    console.log(req)
-    try {
-        console.log('Received form data:', formData);
-
-        const savedForm = await Customers.create(formData);
-        console.log('Saved form:', savedForm);
-
-        res.json({ success: true, message: 'Form submitted successfully' });
-    } catch (error) {
-        console.error('Error during form submission:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
-    }
-});
-
-
-
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
-module.exports = Customers;
+</html>
