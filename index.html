@@ -345,44 +345,40 @@
             document.body.appendChild(overlay);
         }
 
-        function submitForm(event) {
+function submitForm(event) {
             event.preventDefault();
 
-            var formData = new FormData(document.querySelector('form'));
+            var formData = new FormData(document.getElementById('enquiry-form'));
             var data = {};
             formData.forEach(function (value, key) {
                 data[key] = value;
             });
 
-            fetch('https://diggajmotors.com/submit-form', {
+            fetch('https://www.diggajmotors.com/submit-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
 
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),
-                })
-                .then(response => response.json())
-                .then(result => {
-                    console.log(result);
+                var message = result.success ? 'Form submitted successfully!' : 'Form submission failed. Please try again.';
+                alert(message);
 
-                    var message = result.success ? 'Form submitted successfully!' : 'Form submission failed. Please try again.';
-                    alert(message);
+                var overlay = document.querySelector('.overlay');
+                if (overlay) {
+                    document.body.removeChild(overlay);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
 
-                    var overlay = document.querySelector('.overlay');
-                    if (overlay) {
-                        document.body.removeChild(overlay);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-
-                    alert('Form submission failed. Please try again.');
-                });
+                alert('Form submission failed. Please try again.');
+            });
         }
-
-
-        setTimeout(showPopup, 3000);
 
         function scrollToContact() {
             var contactSection = document.getElementById('contact');
@@ -390,6 +386,9 @@
                 behavior: 'smooth'
             });
         }
+
+        // Automatically show the popup after 3 seconds
+        setTimeout(showPopup, 3000);
     </script>
 </body>
 
