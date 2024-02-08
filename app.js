@@ -19,7 +19,7 @@ const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     user: "connectstuti",
-    pass: "DiggajDtabase",
+    pass: "DiggajDatabase",
 };
 mongoose.connect(mongoDBURI, options)
     .then(() => {
