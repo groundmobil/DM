@@ -1,10 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 
   
 
@@ -62,19 +64,19 @@ const Customers = mongoose.model('customer', customerSchema);
 
 app.post('/submit-form', async (req, res) => {
     const formData = req.body;
-    console.log(req)
-    try {
-        console.log('Received form data:', formData);
+    console.log('Received form data:', formData);
 
+    try {
         const savedForm = await Customers.create(formData);
         console.log('Saved form:', savedForm);
 
         res.json({ success: true, message: 'Form submitted successfully' });
     } catch (error) {
         console.error('Error during form submission:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
+        res.status(500).json({ success: false, error: 'Internal Server Error', details: error.message });
     }
 });
+
 
 
 
