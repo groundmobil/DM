@@ -7,31 +7,26 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors());
-  
-
 app.use(express.static('public'));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const mongoDBURI = "mongodb+srv://cluster0.zhkvyeb.mongodb.net/DiggajMotors";
+const mongoDBURI = "mongodb+srv://your-username:your-password@cluster0.zhkvyeb.mongodb.net/your-database";
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    user: "connectstuti",
-    pass: "DiggajDatabase",
 };
+
 mongoose.connect(mongoDBURI, options)
     .then(() => {
         console.log('MongoDB connection successful');
         app.listen(PORT, () => {
-            console.log(`Server is running on https://www.diggajmotors.com/`);
+            console.log(`Server is running on http://localhost:${PORT}`);
         });
     })
     .catch((error) => {
         console.error('MongoDB connection failed:', error);
     });
-
 
 const customerSchema = new mongoose.Schema({
     Name: {
@@ -57,13 +52,10 @@ const customerSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Customers = mongoose.model('customer', customerSchema);
-
-
+const Customers = mongoose.model('Customer', customerSchema);
 
 app.post('/submit-form', async (req, res) => {
     const formData = req.body;
-    console.log(req)
     try {
         console.log('Received form data:', formData);
 
@@ -76,9 +68,6 @@ app.post('/submit-form', async (req, res) => {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
-
-
-
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
