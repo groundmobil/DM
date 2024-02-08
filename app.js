@@ -4,14 +4,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const mongoDBURI = "mongodb+srv://your-username:your-password@cluster0.zhkvyeb.mongodb.net/your-database";
+const mongoDBURI = "mongodb+srv://connectstuti:DiggajDatabase@cluster0.zhkvyeb.mongodb.net/DiggajMotors";
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
