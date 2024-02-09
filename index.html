@@ -362,7 +362,7 @@ function submitForm(event) {
             .then(result => {
                 console.log(result);
 
-                var message = result.success ? 'Form submitted successfully!' : 'Form submission failed. Please try again.';
+                var message = result.success 
                 alert(message);
 
                 var overlay = document.querySelector('.overlay');
