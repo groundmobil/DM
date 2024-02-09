@@ -1,4 +1,3 @@
-
 <html lang="en">
 
 <head>
@@ -354,9 +353,25 @@ function submitForm(event) {
                 data[key] = value;
             });
 
+            var data = JSON.stringify({
+    "collection": "Customer",
+    "database": "DiggajMotors",
+    "dataSource": "Cluster0",
+    "projection": {
+        "_id": 1
+        }
+        });
+
             fetch('/submit-form', {
-    method: 'POST',
-    body: formData,
+    method: 'post',
+    data: data,
+    url: 'https://ap-south-1.aws.data.mongodb-api.com/app/data-bzpjg/endpoint/data/v1/action/findOne',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Request-Headers': '*',
+      'api-key': 'mv3N87azFuhsY9Ou8W91gOFn91UINFkOesTb1GcYjzufDmYGxSXjbevfiicYBDQS',
+    },
+
 })
             .then(response => response.json())
             .then(result => {
