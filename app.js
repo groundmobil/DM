@@ -6,20 +6,8 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const corsOptions = {
-    origin: '*',
-};
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-};
 
-app.use(corsOption());
+app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,7 +22,7 @@ mongoose.connect(mongoDBURI, options)
     .then(() => {
         console.log('MongoDB connection successful');
         app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
+            console.log(`https://www.diggajmotors.com/submit-form`);
         });
     })
     .catch((error) => {
