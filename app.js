@@ -67,7 +67,7 @@ const customerSchema = new mongoose.Schema({
 
 const Customers = mongoose.model('Customer', customerSchema);
 
-app.post('/submit-form', async (req, res) => {
+app.post('https://www.diggajmotors.com/submit-form', async (req, res) => {
     const formData = req.body;
     try {
         console.log('Received form data:', formData);
