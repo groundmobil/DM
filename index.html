@@ -355,12 +355,9 @@ function submitForm(event) {
             });
 
             fetch('https://www.diggajmotors.com/submit-form', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
+    method: 'POST',
+    body: formData,
+})
             .then(response => response.json())
             .then(result => {
                 console.log(result);
