@@ -363,8 +363,8 @@ function submitForm(event) {
         });
 
             fetch('https://ap-south-1.aws.data.mongodb-api.com/app/data-bzpjg/endpoint/data/v1/action/findOne', {
-    method: 'post',
-    data: data,
+    method: 'POST',
+    body: formData,
 
     headers: {
       'Content-Type': 'application/json',
