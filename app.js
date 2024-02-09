@@ -6,11 +6,9 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = [
-    'http://localhost:3000', 
-    'https://www.diggajmotors.com/',
-];
-
+const corsOptions = {
+    origin: '*',
+};
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
