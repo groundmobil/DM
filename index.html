@@ -362,10 +362,10 @@ function submitForm(event) {
         }
         });
 
-            fetch('/submit-form', {
+            fetch('https://ap-south-1.aws.data.mongodb-api.com/app/data-bzpjg/endpoint/data/v1/action/findOne', {
     method: 'post',
     data: data,
-    url: 'https://ap-south-1.aws.data.mongodb-api.com/app/data-bzpjg/endpoint/data/v1/action/findOne',
+
     headers: {
       'Content-Type': 'application/json',
       'Access-Control-Request-Headers': '*',
