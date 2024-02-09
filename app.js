@@ -1,34 +1,20 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const mongoose = require('mongoose');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-
 app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true })); // Parse form data
 
-const mongoDBURI = "mongodb+srv://connectstuti:DiggajDatabase@cluster0.zhkvyeb.mongodb.net/DiggajMotors";
-const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-};
+// Replace with your MongoDB connection details
+const mongoURI = "mongodb+srv://connectstuti:DiggajDatabase@cluster0.zhkvyeb.mongodb.net/?retryWrites=true&w=majority";
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('Error connecting to MongoDB:', err));
 
-mongoose.connect(mongoDBURI, options)
-    .then(() => {
-        console.log('MongoDB connection successful');
-        app.listen(PORT, () => {
-            console.log(`https://www.diggajmotors.com/submit-form`);
-        });
-    })
-    .catch((error) => {
-        console.error('MongoDB connection failed:', error);
-    });
-
+// Create your schema
 const customerSchema = new mongoose.Schema({
     Name: {
         type: String,
@@ -55,19 +41,23 @@ const customerSchema = new mongoose.Schema({
 
 const Customers = mongoose.model('Customer', customerSchema);
 
-app.post('https://www.diggajmotors.com/submit-form', async (req, res) => {
-    const formData = req.body;
-    try {
-        console.log('Received form data:', formData);
+app.post('/submit-form', async (req, res) => {
+  try {
+    const formData = req.body; // Access form data from request body
 
-        const savedForm = await Customers.create(formData);
-        console.log('Saved form:', savedForm);
+    // Validate and sanitize data here (recommended)
 
-        res.json({ success: true, message: 'Form submitted successfully' });
-    } catch (error) {
-        console.error('Error during form submission:', error);
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
-    }
+    // Create a new user document
+    const newUser = new User(formData);
+
+    // Save the user document
+    await newUser.save();
+
+    res.json({ message: 'Form submitted successfully!' });
+  } catch (error) {
+    console.error('Error sending data:', error);
+    res.status(500).json({ error: 'Failed to submit form' });
+  }
 });
 
 app.get('/', (req, res) => {
